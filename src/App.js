@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import yaml from 'js-yaml';
 import Tile from './Tile';
 import ContextMenu from './ContextMenu';
-import axios from 'axios';
 import './App.css';
 
 const App = () => {
@@ -16,8 +15,17 @@ const App = () => {
   useEffect(() => {
     const loadData = async () => {
       try {
-        const response = await axios.get('/data.yaml');
-        const parsedData = yaml.safeLoad(response.data);
+        const response = await fetch('/data.yaml', {
+          method: 'GET',
+          headers: {
+            'Accept': 'application/yaml',
+          },
+        });
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        const data = await response.text();
+        const parsedData = yaml.safeLoad(data);
     
         // Add isHighlighted property to each tile
         const dataWithInitialHighlight = parsedData.map((group) => ({
@@ -38,6 +46,27 @@ const App = () => {
 
   // Attach the click event listener to the entire app
   useEffect(() => {
+    const globalClickHandler = () => {
+      console.log(`globalClickHandler isDependencyView: ${isDependencyView}, showMenu: ${showMenu}, `)
+      if (showMenu) {
+        // Close the context menu
+        setShowMenu(false);
+      }else if (isDependencyView) {
+        // Reset isDependencyView for all tiles
+        setData((prevData) => {
+          const newData = prevData.map((group) => ({
+            ...group,
+            tiles: group.tiles.map((tile) => ({
+              ...tile,
+              isDependencyView: false,
+            })),
+          }));
+          return newData;
+        });
+        setIsDependencyView(false);
+      }
+    };
+    
     // console.log(`attach handleAppClick`)
     document.addEventListener('click', globalClickHandler);
     // Clean up the event listener on component unmount
@@ -60,27 +89,6 @@ const App = () => {
     setShowMenu(false);
     return true;
   }
-
-  const globalClickHandler = () => {
-    console.log(`globalClickHandler isDependencyView: ${isDependencyView}, showMenu: ${showMenu}, `)
-    if (showMenu) {
-      // Close the context menu
-      setShowMenu(false);
-    }else if (isDependencyView) {
-      // Reset isDependencyView for all tiles
-      setData((prevData) => {
-        const newData = prevData.map((group) => ({
-          ...group,
-          tiles: group.tiles.map((tile) => ({
-            ...tile,
-            isDependencyView: false,
-          })),
-        }));
-        return newData;
-      });
-      setIsDependencyView(false);
-    }
-  };
   
   const handleHighlightDependents = (clickedTile) => {
     console.log(`handleHighlightDependents`)
@@ -96,7 +104,7 @@ const App = () => {
           tiles: group.tiles.map((tile) => {
             const dependencyType = clickedTile.backends?.includes(tile.name)?
               'backend' : clickedTile.consumers?.includes(tile.name)?
-                'consumer' : tile.name == clickedTile.name?
+                'consumer' : tile.name === clickedTile.name?
                   'self': 'none'
             const updatedTile = {
               ...tile,
