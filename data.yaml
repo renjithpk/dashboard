@@ -1,0 +1,122 @@
+
+- group: booking
+  color: "#99bbf2"
+  tiles:
+    - name: availability-api
+      backends:
+      - booking-api
+      - user-management-api
+      consumers:
+      - booking-api 
+      menu:
+      - name: availability Log
+        link: http://link/availability-api
+      - name: item 1
+      - name: item 2
+      - name: item 3
+      - name: item 4
+      badges:
+      - type: colorcode
+        name: versions
+        colors:
+        - blue
+        - red
+        - stringColor:
+            link: /details/booking-api/version
+            path: "api.version"
+      - type: text-badge
+        name: Git Repo
+        color: "#3E8BFF"
+        info: "hint message"
+        items:
+          - name: View Code
+            link: https://github.com/availability-api
+      - type: hybrid-badge
+        name: "  git  "
+        image: git.png
+        info: "hint message"
+        color: 'white'
+      - type: image-badge
+        image: grafana.png
+        info: "hint message"
+        color: 'white'
+    - name: booking-api
+      backends:
+        - inventory-api
+        - user-management-api
+      menu:
+        - name: booking Log
+          link: http://link/booking-api
+        - name: item 1
+        - name: item 2
+        - name: item 3
+        - name: item 4
+      badges:
+        - type: text-badge
+          name: Git Repo
+          color: "#3E8BFF"
+          items:
+            - name: View Code
+              link: https://github.com/booking-api
+        - type: image-badge
+          image: git.png
+          info: "hint message"
+          color: 'white'
+- group: payment
+  color: "#b1e0c9"
+  tiles:
+    - name: payment-gateway-api
+      menu:
+        - name: payment Log
+          link: http://link/payment-gateway-api
+        - name: item 1
+        - name: item 2
+      badges:
+        - type: text-badge
+          name: Git Repo
+          color: "#3E8BFF"
+          items:
+            - name: View Code
+              link: https://github.com/payment-gateway-api
+- group: users
+  color: "#dce0b1"
+  tiles:
+    - name: user-management-api
+      consumers:
+        - booking-api
+        - availability-api
+      menu:
+        - name: users Log
+          link: http://link/user-management-api
+        - name: item 1
+        - name: item 2
+      badges:
+        - type: text-badge
+          name: Git Repo
+          color: "#3E8BFF"
+          items:
+            - name: View Code
+              link: https://github.com/user-management-api
+- group: vehicles
+  color: "#dab1e0"
+  tiles:
+    - name: inventory-api
+      consumers:
+        - booking-api
+      menu:
+        - name: vehicles Log
+          link: http://link/inventory-api
+        - name: item 1
+        - name: item 2
+        - name: item 1
+        - name: item 2
+        - name: item 3
+        - name: item 4
+      badges:
+        - type: text-badge
+          name: Git Repo
+          color: yellow
+          items:
+            - name: View Code
+              link: https://github.com/inventory-api
+ 
