@@ -105,7 +105,7 @@ const Tile = ({ data, style, onContextMenu, onTileClick }) => {
                   <ImageBadge
                     key={badgeIndex}
                     imageSrc={badge.image}
-                    color={badge.color}
+                    color={badge.color? badge.color: 'rgba(0, 0, 0, 0)'}
                     info={badge.info}
                     onClick={(event) =>
                       handleBadgeClick(event, badge, 'topRight')

@@ -38,7 +38,7 @@ const ImageBadge = ({ imageSrc, color, info, onClick }) => (
     onClick={onClick}
     title={info}
   >
-    {imageSrc && <img src={imageSrc} alt="no img" />}
+    {imageSrc && <img className="image-badge-image" src={process.env.PUBLIC_URL + '/' + imageSrc} alt="no img" />}
   </button>
 );
 

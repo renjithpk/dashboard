@@ -19,6 +19,13 @@
 /* Style for the image badge */
 .image-badge {
   max-width: 100px;
+  padding-left: 0px;
+  padding-right: 0px;
+  padding: 0px;
+  border-radius: 0px;
+}
+.image-badge-image {
+  max-height: 100%; /* Specify a unit for clarity */
 }
 
 /* Style for the hybrid badge */
