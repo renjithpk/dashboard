@@ -37,8 +37,8 @@
         info: "hint message"
         color: 'white'
       - type: image-badge
-        image: grafana.png
-        info: "hint message"
+        image: jenkins.png
+        info: "click for jenkins"
         color: 'white'
     - name: booking-api
       backends:
