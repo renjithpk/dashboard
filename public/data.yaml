@@ -31,6 +31,8 @@
         items:
           - name: View Code
             link: https://github.com/availability-api
+          - name: View PRS
+            link: https://github.com/availability-api
       - type: hybrid-badge
         name: "  git  "
         image: git.png
@@ -40,6 +42,7 @@
         image: jenkins.png
         info: "click for jenkins"
         color: 'white'
+        link:  https://github.com/availability-api
     - name: booking-api
       backends:
         - inventory-api

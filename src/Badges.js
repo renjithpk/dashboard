@@ -1,14 +1,15 @@
 import React, { useEffect, useState } from 'react';
-import { resolveValue } from './Utils.js'
-import './Badges.css'
+import { resolveValue } from './Utils.js';
+import './Badges.css';
+
 // TextBadge component
-const TextBadge = ({ name, color, info, onClick }) => {
+const TextBadge = ({ badge, onClick }) => {
   const [displayText, setDisplayText] = useState('');
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const result = await resolveValue(name);
+        const result = await resolveValue(badge.name);
         setDisplayText(result);
       } catch (error) {
         console.error('Error fetching data for TextBadge:', error.message);
@@ -16,14 +17,14 @@ const TextBadge = ({ name, color, info, onClick }) => {
     };
 
     fetchData();
-  }, [name]);
+  }, [badge.name]);
 
   return (
     <button
       className="badge-container text-badge" // Use clickable-badge and badge-container classes
-      style={{ backgroundColor: color }}
-      onClick={onClick}
-      title={info}
+      style={{ backgroundColor: badge.color }}
+      onClick={(event) => onClick(event, { items: badge.items, link: badge.link })}
+      title={badge.info}
     >
       {displayText}
     </button>
@@ -31,25 +32,25 @@ const TextBadge = ({ name, color, info, onClick }) => {
 };
 
 // ImageBadge component
-const ImageBadge = ({ imageSrc, color, info, onClick }) => (
+const ImageBadge = ({ badge, onClick }) => (
   <button
     className="badge-container image-badge" // Use clickable-badge and badge-container classes
-    style={{ backgroundColor: color }}
-    onClick={onClick}
-    title={info}
+    style={{ backgroundColor: badge.color }}
+    onClick={(event) => onClick(event, { items: badge.items, link: badge.link })}
+    title={badge.info}
   >
-    {imageSrc && <img className="image-badge-image" src={process.env.PUBLIC_URL + '/' + imageSrc} alt="no img" />}
+    {badge.image && <img className="image-badge-image" src={process.env.PUBLIC_URL + '/' + badge.image} alt="no img" />}
   </button>
 );
 
 // HybridBadge component
-const HybridBadge = ({ name, imageSrc, color, info, onClick }) => {
+const HybridBadge = ({ badge, onClick }) => {
   const [displayText, setDisplayText] = useState('');
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const result = await resolveValue(name);
+        const result = await resolveValue(badge.name);
         setDisplayText(result);
       } catch (error) {
         console.error('Error fetching data for HybridBadge:', error.message);
@@ -57,19 +58,19 @@ const HybridBadge = ({ name, imageSrc, color, info, onClick }) => {
     };
 
     fetchData();
-  }, [name]);
+  }, [badge.name]);
 
   return (
     <button
       className="badge-container hybrid-badge" // Use clickable-badge and badge-container classes
-      style={{ backgroundColor: color }}
-      onClick={onClick}
-      title={info}
+      style={{ backgroundColor: badge.color }}
+      onClick={(event) => onClick(event, { items: badge.items, link: badge.link })}
+      title={badge.info}
     >
-      {imageSrc && (
+      {badge.image && (
         <img
           className="hybrid-badge-image"
-          src={process.env.PUBLIC_URL + '/' + imageSrc}
+          src={process.env.PUBLIC_URL + '/' + badge.image}
           alt="no img"
         />
       )}

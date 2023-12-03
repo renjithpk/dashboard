@@ -1,5 +1,5 @@
 // Tile.js
-import React, { useRef, useState } from 'react';
+import React, { useRef } from 'react';
 import { TextBadge, HybridBadge, ImageBadge } from './Badges';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import './Tile.css';
@@ -38,14 +38,15 @@ const Tile = ({ data, style, onContextMenu, onTileClick }) => {
     onContextMenu(data.menu, e, styles);
   };
 
-  const handleBadgeClick = (event, badgeData, position) => {
+  const handleBadgeClick = (event, data) => {
     event.stopPropagation();
-    
     // Open button link in a new window if it's defined
-    if (badgeData.link) {
-      window.open(badgeData.link, '_blank');
+    if (data.link) {
+      window.open(data.link, '_blank');
+    } else if(data.items) {
+      const styles = calculateContextMenuPosition("topRight", event.target);
+      onContextMenu(data.items, event, styles);
     }
-    // Add more handling if needed
   };
 
   const handleTileClick = (event) => {
@@ -79,11 +80,9 @@ const Tile = ({ data, style, onContextMenu, onTileClick }) => {
                 return (
                   <TextBadge
                     key={badgeIndex}
-                    name={badge.name}
-                    color={badge.color}
-                    info={badge.info}
-                    onClick={(event) =>
-                      handleBadgeClick(event, badge, 'topRight')
+                    badge={badge}
+                    onClick={(event, data) =>
+                      handleBadgeClick(event, data)
                     }
                   />
                 );
@@ -91,12 +90,9 @@ const Tile = ({ data, style, onContextMenu, onTileClick }) => {
                 return (
                   <HybridBadge
                     key={badgeIndex}
-                    name={badge.name}
-                    imageSrc={badge.image}
-                    color={badge.color}
-                    info={badge.info}
-                    onClick={(event) =>
-                      handleBadgeClick(event, badge, 'topRight')
+                    badge={badge}
+                    onClick={(event, data) =>
+                      handleBadgeClick(event, data)
                     }
                   />
                 );
@@ -104,11 +100,9 @@ const Tile = ({ data, style, onContextMenu, onTileClick }) => {
                 return (
                   <ImageBadge
                     key={badgeIndex}
-                    imageSrc={badge.image}
-                    color={badge.color? badge.color: 'rgba(0, 0, 0, 0)'}
-                    info={badge.info}
-                    onClick={(event) =>
-                      handleBadgeClick(event, badge, 'topRight')
+                    badge={badge}
+                    onClick={(event, data) =>
+                      handleBadgeClick(event, data)
                     }
                   />
                 );
