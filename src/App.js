@@ -15,7 +15,7 @@ const App = () => {
   useEffect(() => {
     const loadData = async () => {
       try {
-        const response = await fetch('/data.yaml', {
+        const response = await fetch(process.env.PUBLIC_URL + '/data.yaml', {
           method: 'GET',
           headers: {
             'Accept': 'application/yaml',
@@ -66,7 +66,7 @@ const App = () => {
         setIsDependencyView(false);
       }
     };
-    
+
     // console.log(`attach handleAppClick`)
     document.addEventListener('click', globalClickHandler);
     // Clean up the event listener on component unmount
