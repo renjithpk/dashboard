@@ -45,26 +45,38 @@ const ImageBadge = ({ badge, onClick }) => (
 
 // HybridBadge component
 const HybridBadge = ({ badge, onClick }) => {
+  const [resolvedList, setResolvedList] = useState([]);
   const [displayText, setDisplayText] = useState('');
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const result = await resolveValue(badge.name);
-        setDisplayText(result);
+        // Resolve the name property for the badge itself
+        const displayTextValue = await resolveValue(badge.name);
+        setDisplayText(displayTextValue);
+
+        // Resolve the name properties for each item in badge.items
+        const resolvedValues = await Promise.all(
+          badge.items.map(async (item) => {
+            const { name, ...rest } = item;
+            const resolvedValue = await resolveValue(name);
+            return { name: resolvedValue, ...rest };
+          })
+        );
+        setResolvedList(resolvedValues);
       } catch (error) {
-        console.error('Error fetching data for HybridBadge:', error.message);
+        console.error('Error fetching data for HybridBadge:', error);
       }
     };
 
     fetchData();
-  }, [badge.name]);
+  }, [badge.items, badge.name]);
 
   return (
     <button
-      className="badge-container hybrid-badge" // Use clickable-badge and badge-container classes
+      className="badge-container hybrid-badge"
       style={{ backgroundColor: badge.color }}
-      onClick={(event) => onClick(event, { items: badge.items, link: badge.link })}
+      onClick={(event) => onClick(event, { items: resolvedList, link: badge.link })}
       title={badge.info}
     >
       {badge.image && (
