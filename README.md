@@ -1,70 +1,132 @@
-# Getting Started with Create React App
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# Dashboard Configuration Language
 
-## Available Scripts
+This dashboard application allows you to configure pages using YAML. The configuration is parsed and rendered as a series of tiles with menus, groups, and badges. This document describes the YAML syntax for configuring the dashboard.
 
-In the project directory, you can run:
+## YAML Structure
 
-### `npm start`
+### Top-level properties:
+- **group**: Defines a group of tiles. Each group can have multiple tiles and a distinct color.
+- **tiles**: Defines the tiles shown in each group. Each tile represents a widget, service, or data card.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+### Group Configuration
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+Each group has:
+- **group**: The name of the group (e.g., `booking`, `payment`, `users`, `vehicles`).
+- **color**: A color code (hex format) representing the group's visual theme.
+- **tiles**: A list of tiles within the group.
 
-### `npm test`
+Example:
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+```yaml
+- group: booking
+  color: "#99bbf2"
+  tiles:
+    - name: availability-api
+      backends:
+      - booking-api
+      - user-management-api
+      consumers:
+      - booking-api
+      menu:
+      - name: availability Log
+        link: http://link/availability-api
+```
 
-### `npm run build`
+### Tile Configuration
+Each tile defines a widget or service and can include:
+- **name**: The name of the tile (e.g., `availability-api`, `payment-gateway-api`).
+- **backends**: A list of backend services used by the tile.
+- **consumers**: A list of services that consume this tile.
+- **menu**: A list of menu items associated with the tile. Each menu item has:
+  - **name**: The name of the menu item.
+  - **link**: The URL the menu item links to (optional).
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+Example:
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+```yaml
+    - name: availability-api
+      backends:
+      - booking-api
+      - user-management-api
+      consumers:
+      - booking-api
+      menu:
+      - name: availability Log
+        link: http://link/availability-api
+      - name: item 1
+```
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+### Badge Configuration
+Badges provide additional information and visual markers on a tile. Badge types include:
 
-### `npm run eject`
+- **text-badge**: Displays text-based badges with optional links.
+  - **name**: The label for the badge (e.g., `Git Repo`).
+  - **color**: Color of the badge.
+  - **info**: A short description or tooltip (optional).
+  - **items**: A list of items (e.g., `View Code`, `View PRS`) with associated links.
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+- **image-badge**: Displays an image as a badge.
+  - **image**: The image filename.
+  - **info**: A short description or tooltip.
+  - **link**: A link associated with the image (optional).
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+- **hybrid-badge**: Combines text and image in a badge.
+  - **image**: The image filename.
+  - **info**: Tooltip text.
+  - **items**: A list of associated items with links.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+Example:
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+```yaml
+      badges:
+      - type: text-badge
+        name: Git Repo
+        color: "#3E8BFF"
+        info: "hint message"
+        items:
+          - name: View Code
+            link: https://github.com/availability-api
+      - type: image-badge
+        image: git.png
+        info: "hint message"
+        link: https://github.com/availability-api
+```
 
-## Learn More
+## Full Example
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+```yaml
+- group: booking
+  color: "#99bbf2"
+  tiles:
+    - name: availability-api
+      backends:
+      - booking-api
+      - user-management-api
+      consumers:
+      - booking-api 
+      menu:
+      - name: availability Log
+        link: http://link/availability-api
+      badges:
+      - type: text-badge
+        name: Git Repo
+        color: "#3E8BFF"
+        items:
+          - name: View Code
+            link: https://github.com/availability-api
+- group: payment
+  color: "#b1e0c9"
+  tiles:
+    - name: payment-gateway-api
+      menu:
+      - name: payment Log
+        link: http://link/payment-gateway-api
+      badges:
+      - type: text-badge
+        name: Git Repo
+        color: "#3E8BFF"
+        items:
+          - name: View Code
+            link: https://github.com/payment-gateway-api
+```

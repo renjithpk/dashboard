@@ -38,6 +38,11 @@
         image: git.png
         info: "hint message"
         color: 'white'
+        items:
+          - name: View Code
+            link: https://github.com/availability-api
+          - name: View PRS
+            link: https://github.com/availability-api
       - type: image-badge
         image: jenkins.png
         info: "click for jenkins"
